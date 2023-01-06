@@ -1,0 +1,13 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Product {
+  id: Int!
+  name: String!
+  days_to_expire: Int!
+}
+
+type Query {
+  products(alphabetical: Boolean, days_to_expire: Int): [Product!]!
+}

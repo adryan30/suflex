@@ -2,13 +2,30 @@ version: '3.4'
 
 services:
   app:
-    image: suflex
+    container_name: app
+    image: adryan29/suflex-dev
     build:
       context: .
       dockerfile: ./Dockerfile.dev
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
+      DATABASE_URL: postgresql://suflex:suflex@db:5432/suflex?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - 3000:3000
-      - 9229:9229
-    command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
+  db:
+    container_name: db
+    image: bitnami/postgresql
+    environment:
+      POSTGRESQL_DATABASE: suflex
+      POSTGRESQL_PASSWORD: suflex
+      POSTGRESQL_USERNAME: suflex
+    healthcheck:
+       test: [ "CMD", "pg_isready", "-q", "-d", "suflex", "-U", "suflex" ]
+       interval : 5s
+       timeout : 5s
+       retries : 5
+    ports:
+      - 5432:5432

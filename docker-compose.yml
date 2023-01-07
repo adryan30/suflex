@@ -36,18 +36,5 @@ services:
       context: ./nginx
     ports:
       - 80:80
-      - 443:443
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
     depends_on:
       - app
-  certbot:
-    container_name: certbot
-    image: certbot/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email adryan.software@gmail.com -d suflex.adryan.me --agree-tos
-    depends_on:
-      - nginx
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot

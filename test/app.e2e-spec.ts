@@ -104,6 +104,30 @@ describe('Full App (e2e)', () => {
     });
   });
 
+  describe('/file', () => {
+    describe('/import (POST)', () => {
+      it('should accepts .csv file and insert in db', async () => {
+        const recordCount = await prisma.product.count();
+        await request(app.getHttpServer())
+          .post('/file/import')
+          .set('Content-Type', 'multipart/form-data')
+          .attach('file', './public/produtos.csv')
+          .expect(201);
+        expect(recordCount).toBeLessThan(await prisma.product.count());
+      });
+      it('should reject non .csv file', () => {
+        return request(app.getHttpServer())
+          .post('/file/import')
+          .set('Content-Type', 'multipart/form-data')
+          .attach('file', './package.json')
+          .expect(400);
+      });
+      it('should reject request with no file', () => {
+        return request(app.getHttpServer()).post('/file/import').expect(400);
+      });
+    });
+  });
+
   afterAll(() => {
     app.close();
   });

@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
+import { FileModule } from './file/file.module';
 import { ProductModule } from './product/product.module';
 
 @Module({
@@ -19,6 +20,7 @@ import { ProductModule } from './product/product.module';
     }),
     DatabaseModule,
     ProductModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

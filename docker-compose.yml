@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  app:
+    image: suflex
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+  db:
+    image: bitnami/postgresql
+    environment:
+      POSTGRESQL_DATABASE: suflex
+      POSTGRESQL_PASSWORD: suflex
+      POSTGRESQL_USERNAME: suflex
+    ports:
+      - 5432:5432

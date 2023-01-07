@@ -29,3 +29,12 @@ services:
        retries : 5
     ports:
       - 5432:5432
+  nginx:
+    container_name: nginx
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - app

@@ -1,4 +1,4 @@
-FROM node:lts-hydrogen AS builder
+FROM node:hydrogen-alpine AS builder
 
 WORKDIR /app
 COPY package.json ./
@@ -8,7 +8,7 @@ RUN yarn install
 COPY . ./
 RUN yarn build
 
-FROM node:lts-hydrogen
+FROM node:hydrogen-alpine
 
 ENV PORT=3000
 ENV NODE_ENV=production

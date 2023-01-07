@@ -30,7 +30,7 @@ describe('Full App (e2e)', () => {
         const data = {
           query: 'query { products { id, days_to_expire, name } }',
         };
-
+        const dbQuery = await prisma.product.count();
         const res = await request(app.getHttpServer())
           .post('/graphql')
           .send(data)
@@ -38,6 +38,7 @@ describe('Full App (e2e)', () => {
         expect(res.body.data.products).toBeDefined();
         const { products } = res.body.data;
         expect(products.length).toBeGreaterThan(0);
+        expect(products.length).toEqual(dbQuery);
       });
 
       it('should list products expiring today', async () => {
@@ -46,7 +47,9 @@ describe('Full App (e2e)', () => {
             'query Products($daysToExpire: Int) { products(days_to_expire: $daysToExpire) { id, days_to_expire, name } }',
           variables: { daysToExpire: 0 },
         };
-
+        const dbQuery = await prisma.product.count({
+          where: { days_to_expire: 0 },
+        });
         const res = await request(app.getHttpServer())
           .post('/graphql')
           .send(data)
@@ -54,9 +57,8 @@ describe('Full App (e2e)', () => {
         expect(res.body.data.products).toBeDefined();
         const { products } = res.body.data;
         expect(products.length).toBeGreaterThan(0);
-        expect(
-          products.filter((product) => product.days_to_expire !== 0).length,
-        ).toBe(0);
+        expect(products.filter((i) => i.days_to_expire !== 0).length).toBe(0);
+        expect(products.length).toEqual(dbQuery);
       });
 
       it('should list products expiring tomorrow', async () => {
@@ -65,7 +67,9 @@ describe('Full App (e2e)', () => {
             'query Products($daysToExpire: Int) { products(days_to_expire: $daysToExpire) { id, days_to_expire, name } }',
           variables: { daysToExpire: 1 },
         };
-
+        const dbQuery = await prisma.product.count({
+          where: { days_to_expire: 1 },
+        });
         const res = await request(app.getHttpServer())
           .post('/graphql')
           .send(data)
@@ -74,6 +78,7 @@ describe('Full App (e2e)', () => {
         const { products } = res.body.data;
         expect(products.length).toBeGreaterThan(0);
         expect(products.filter((i) => i.days_to_expire !== 1).length).toBe(0);
+        expect(products.length).toEqual(dbQuery);
       });
 
       it('should list products alphabetically', async () => {
@@ -85,6 +90,7 @@ describe('Full App (e2e)', () => {
         const dbQuery = await prisma.product.findMany({
           orderBy: { name: 'asc' },
         });
+
         const res = await request(app.getHttpServer())
           .post('/graphql')
           .send(data)
@@ -93,6 +99,7 @@ describe('Full App (e2e)', () => {
         const products: [] = res.body.data.products;
         expect(products.length).toBeGreaterThan(0);
         expect(products).toEqual(dbQuery);
+        expect(products.length).toEqual(dbQuery.length);
       });
     });
   });

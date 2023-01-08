@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  app:
+    container_name: app
+    image: adryan29/suflex-test
+    build:
+      context: .
+      dockerfile: ./Dockerfile.test
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 3000:3000
+  db:
+    container_name: db
+    image: bitnami/postgresql
+    environment:
+      POSTGRESQL_DATABASE: suflex
+      POSTGRESQL_PASSWORD: suflex
+      POSTGRESQL_USERNAME: suflex
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'suflex', '-U', 'suflex']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432

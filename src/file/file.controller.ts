@@ -22,7 +22,7 @@ export class FileController {
         validators: [new FileTypeValidator({ fileType: 'text/csv' })],
       }),
     )
-    file: Express.Multer.File,
+    file?: Express.Multer.File,
   ) {
     if (!file) throw new BadRequestException('File upload is required');
     return this.fileService.handleCsvUpload(file);

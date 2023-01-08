@@ -1,19 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { parse } from 'csv-parse/sync';
 const path = require('node:path');
-const fs = require('node:fs');
+const fs = require('node:fs/promises');
 
 const prisma = new PrismaClient();
 async function main() {
   await prisma.product.deleteMany();
   const csvPath = path.join(__dirname, '..', 'public', 'produtos.csv');
-  const csvStream = fs.createReadStream(csvPath);
-  const csvString = await new Promise<string>((res, rej) => {
-    const chunks = [];
-    csvStream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
-    csvStream.on('error', (err) => rej(err));
-    csvStream.on('end', () => res(Buffer.concat(chunks).toString('utf8')));
-  });
+  const csvBuffer = await fs.readFile(csvPath);
+  const csvString = csvBuffer.toString('utf8');
   const parsedCsv = parse(csvString, { delimiter: ',', from_line: 2 });
   const data = parsedCsv.map(([name, days]) => ({
     name,

@@ -6,5 +6,5 @@ export class GetProductArgs {
   alphabetical?: boolean;
 
   @Field(() => Int, { nullable: true })
-  days_to_expire: number;
+  days_to_expire?: number;
 }

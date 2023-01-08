@@ -6,10 +6,9 @@ services:
     image: adryan29/suflex
     build:
       context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://suflex:suflex@db:5432/suflex?schema=public
+      dockerfile: ./Dockerfile.prod
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy

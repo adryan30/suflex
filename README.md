@@ -45,6 +45,60 @@ $ docker compose -f docker-compose.test.yml up
 $ docker compose -f docker-compose.prod.yml up
 ```
 
+## Acesso na AWS
+
+Esse projeto está hospedado na AWS!
+```
+# Endereço para API GraphQL
+http://suflex.adryan.me/graphql
+```
+```
+# Endereço para envio de arquivo .csv
+http://suflex.adryan.me/file/import
+```
+
+## Exemplos de buscas para aplicação
+#### Busca por todos os produtos, sem restrição
+```
+query Products {
+    products { 
+        id,
+        name,
+        days_to_expire
+    }
+}
+```
+#### Busca por produtos que vencem hoje
+```
+query Products {
+    products(days_to_expire: 0) { 
+        id,
+        name,
+        days_to_expire
+    }
+}
+```
+#### Busca por produtos que vencem amanhã
+```
+query Products {
+    products(days_to_expire: 1) { 
+        id,
+        name,
+        days_to_expire
+    }
+}
+```
+#### Busca por produtos e os lista alfabeticamente
+```
+query Products {
+    products(alphabetical: true) { 
+        id,
+        name,
+        days_to_expire
+    }
+}
+```
+
 ## Contato
 
 - Autor - [Adryan Almeida](https://github.com/adryan30)

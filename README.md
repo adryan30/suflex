@@ -14,9 +14,6 @@ Foi utilizado:
 - [GraphQL](https://graphql.org/) como "query language" da API
 - [Docker](https://www.docker.com/) para containerização da aplicação
 - [Docker Compose](https://docs.docker.com/compose/) para osquestração dos containers
-- [AWS](https://aws.amazon.com/pt/) para hospedagem online e demonstração com o GraphQL Playground
-- [NGINX](https://www.nginx.com/) como "proxy server" para deploy na AWS
-
 
 ## Instalação
 
@@ -43,18 +40,6 @@ $ docker compose -f docker-compose.test.yml up
 
 # Modo de produção
 $ docker compose -f docker-compose.prod.yml up
-```
-
-## Acesso na AWS
-
-Esse projeto está hospedado na AWS!
-```
-# Endereço para API GraphQL
-http://suflex.adryan.me/graphql
-```
-```
-# Endereço para envio de arquivo .csv
-http://suflex.adryan.me/file/import
 ```
 
 ## Exemplos de buscas para aplicação
